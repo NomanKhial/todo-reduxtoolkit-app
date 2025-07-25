@@ -1,28 +1,40 @@
 import { useState } from "react";
-import "./App.css";
 import InputBox from "./Components/InputBox";
-import TodoList from "./Components/TodoList";
-
+import TodoList from "./Components/TodosList";
+import "./App.css";
+import { useDispatch } from "react-redux";
+import { filterOnSearch } from "./App/Slices/todoSlice";
 function App() {
-  const [inputText, setInputText] = useState("");
-  const [editMode, setEditMode] = useState(null);
+  const [inputText, setInpuText] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [searcText, setSeachText] = useState("");
+  const dispatch = useDispatch();
+
+  function handleSearch(evt) {
+    const val = setSeachText(evt.target.value);
+    dispatch(filterOnSearch(evt.target.value));
+  }
 
   return (
-    <>
-      <div>
-        <InputBox
-          inputText={inputText}
-          setInputText={setInputText}
-          editMode={editMode}
-          setEditMode={setEditMode}
-        />
-        <TodoList
-          setEditMode={setEditMode}
-          inputText={inputText}
-          setInputText={setInputText}
-        />
-      </div>
-    </>
+    <div className="App">
+      <input
+        type="text"
+        placeholder="search"
+        value={searcText}
+        onChange={handleSearch}
+      />
+      <InputBox
+        setEditId={setEditId}
+        inputText={inputText}
+        setInpuText={setInpuText}
+        editId={editId}
+      />
+      <TodoList
+        editId={editId}
+        setEditId={setEditId}
+        setInpuText={setInpuText}
+      />
+    </div>
   );
 }
 

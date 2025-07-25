@@ -1,40 +1,38 @@
 import { useDispatch } from "react-redux";
-import { addItem, editItem } from "../App/Slices/todoSlice.js";
+import { addItem, editItem } from "../App/Slices/todoSlice";
+import { useSelector } from "react-redux";
 
-function InputBox({
-  inputText: text,
-  setInputText,
-  editMode: id,
-  setEditMode,
-}) {
+function InputBox({ inputText, setInpuText, editId, setEditId }) {
+  const todos = useSelector((state) => state.todosItem);
   const dispatch = useDispatch();
 
-  const handleAddItem = () => {
-    if (id != null) {
-      dispatch(editItem({ id, text }));
-      setid(null);
-      setInputText("");
+  // handleAddItem
+  function handleAddItem() {
+    if (editId) {
+      dispatch(editItem({ id: editId, text: inputText }));
+      setInpuText("");
+      setEditId(null);
+      return;
+    }
+    // add logic
+    if (inputText) {
+      dispatch(addItem(inputText));
+      setInpuText("");
       return;
     }
 
-    if (text.trim()) {
-      dispatch(addItem(text));
-      settext("");
-    } else {
-      alert("Please enter a todo item!");
-    }
-  };
+    alert("enter to add ");
+  }
 
   return (
-    <div>
+    <div className="inputBox">
       <input
         type="text"
-        value={text}
-        onChange={(evt) => setInputText(evt.target.value)}
-        placeholder="Add a new task"
+        value={inputText}
+        onChange={(evt) => setInpuText(evt.target.value)}
       />
-      <button onClick={handleAddItem}>
-        {id != null ? "Edit Item" : "Add Item"}
+      <button className="btn" onClick={handleAddItem}>
+        {editId ? "Done" : "Add Item"}
       </button>
     </div>
   );
